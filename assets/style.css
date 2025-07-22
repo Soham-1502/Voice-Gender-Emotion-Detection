@@ -1,0 +1,35 @@
+/* assets/style.css */
+
+body {
+    background: linear-gradient(to right, #e0eafc, #cfdef3);
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+}
+
+h1 {
+    color: #4a4e69;
+    font-size: 3rem;
+    text-shadow: 1px 1px 2px #ccc;
+}
+
+.stButton > button {
+    background-color: #6c5ce7;
+    color: white;
+    font-weight: bold;
+    border-radius: 10px;
+    padding: 10px 20px;
+    transition: all 0.3s ease;
+}
+
+.stButton > button:hover {
+    background-color: #a29bfe;
+    transform: scale(1.05);
+}
+
+hr {
+    border: 1px solid #ccc;
+    margin-top: 20px;
+}
+
+.sidebar .sidebar-content {
+    background-color: #f0f4f8;
+}

@@ -1,0 +1,27 @@
+# Python
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+
+# Virtual environments
+venv/
+.env/
+env/
+
+# IDE and editor files
+.vscode/
+.idea/
+
+# System files
+.DS_Store
+Thumbs.db
+
+# Large model files (optional, if you save Wav2Vec2 models locally)
+backend/model/emotion_processor/
+backend/model/emotion_model/
+backend/model/gender_processor/
+backend/model/gender_model/
+
+# Large audio files (optional, if they're sample data)
+backend/model/*.wav

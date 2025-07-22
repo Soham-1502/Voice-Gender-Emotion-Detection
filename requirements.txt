@@ -1,0 +1,7 @@
+streamlit
+streamlit-lottie
+torch
+transformers
+librosa
+numpy
+requests
