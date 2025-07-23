@@ -2,37 +2,8 @@ import streamlit as st
 from streamlit_lottie import st_lottie
 import requests
 
-# Page config
+# Page config (must be the first Streamlit command)
 st.set_page_config(page_title="Voice AI", page_icon="🎧", layout="centered")
-
-# Inject Minimal CSS Inline
-st.markdown("""
-    <style>
-    .stApp {
-        background: linear-gradient(135deg, #f5f7fa, #c3cfe2);
-        background-attachment: fixed;
-        color: #333333;
-        font-family: 'Segoe UI', sans-serif;
-    }
-    h1, h2, h3 { color: #222831; }
-    section[data-testid="stSidebar"] {
-        background-color: #ffffff;
-        border-right: 2px solid #eeeeee;
-    }
-    .markdown-text-container {
-        font-size: 18px;
-        line-height: 1.6;
-    }
-    /* Custom image styling */
-    img {
-        max-width: 100%;
-        height: 300px;
-        object-fit: contain;
-        display: block;
-        margin: 0 auto;
-    }
-    </style>
-""", unsafe_allow_html=True)
 
 # Load CSS from file
 def local_css(file_name):
@@ -57,29 +28,51 @@ def load_lottie_url(url):
 
 # Load Lottie Animation
 lottie_ai = load_lottie_url("https://assets5.lottiefiles.com/packages/lf20_jcikwtux.json")
-st.title("🎧 Welcome to Voice Emotion & Gender Detector")
+st.title("🎧 Voice Emotion & Gender Detector")
 
 if lottie_ai:
-    st_lottie(lottie_ai, height=300, key="ai_lottie")
+    st_lottie(lottie_ai, height=300, key="ai_lottie")  # Balanced with image
 
 # App Description
 st.markdown("""
-Welcome to your AI-powered voice analysis platform!  
-This site allows you to upload `.wav` audio files and detect the **emotion** and **gender** of the speaker using machine learning.
+Welcome to your **AI-powered voice analysis platform**!  
+Upload `.wav` audio files to detect the **emotion** and **gender** of the speaker using advanced machine learning models.
 
 ---
 
-🎙️ Navigate to the sidebar to try it out.
+🎙️ **Navigate to the sidebar** to start analyzing your audio.
 
-💡 Features:
-- Upload your voice
-- Get real-time predictions
-- Learn how the model works
+💡 **Features**:
+- Upload your voice in `.wav` format
+- Real-time predictions with SVM and CNN models
+- Explore how AI understands emotions and gender
 """)
 
-# Cache External Image
+# Cache External Image (Neon Microphone with Sound Waves)
 @st.cache_data
 def get_image_url():
-    return "https://www.shutterstock.com/shutterstock/photos/2144055901/display_1500/stock-vector-ear-hearing-sound-earphone-logo-2144055901.jpg"
+    return "https://img.freepik.com/free-vector/microphone-with-sound-wave_23-2148494967.jpg"  # Neon microphone icon
 
-st.image(get_image_url(), caption="AI Listening In...")
+st.markdown("### 👋 Get Started")
+st.markdown(
+    """
+    <div style="text-align: center; margin-top: 40px;">
+        <a href="/Upload_and_Detect" target="_self">
+            <button style="
+                background-color: #6c5ce7;
+                color: white;
+                padding: 12px 28px;
+                font-size: 16px;
+                border: none;
+                border-radius: 8px;
+                font-weight: 600;
+                cursor: pointer;
+                transition: background 0.3s ease;
+            ">
+                🎙️ Get Started
+            </button>
+        </a>
+    </div>
+    """,
+    unsafe_allow_html=True
+)

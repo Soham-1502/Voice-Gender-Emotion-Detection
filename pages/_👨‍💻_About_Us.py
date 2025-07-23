@@ -7,7 +7,7 @@ st.title("👨‍💻 About Us")
 st.markdown("""
 Built by a passionate team of ML developers and designers.
 
-- 🤖 AI by: Sarvesh & Team  
-- 🎨 UI/UX by: You!  
-- 📬 Contact: sarvesh@email.com
+- 🤖 AI by: Soham & Team 
+- 🎨 UI/UX by: Sarvesh & Soham
+- 📬 Contact: soham@email.com
 """)

@@ -1,42 +1,73 @@
-
-
 import streamlit as st
+import soundfile as sf
+from io import BytesIO
 import os
-import sys
 import tempfile
 
-# ✅ Add root folder to path so backend/ works
-sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), '..')))
+# Import prediction function
+try:
+    from backend.model.predict import predict_gender_emotion
+except ModuleNotFoundError:
+    st.error("Error: 'predict.py' module not found. Ensure 'predict.py' is in the 'ML-project/backend/model/' directory.")
+    st.stop()
 
+# Load CSS for dark theme
+def local_css(file_name):
+    try:
+        with open(file_name) as f:
+            st.markdown(f"<style>{f.read()}</style>", unsafe_allow_html=True)
+    except FileNotFoundError:
+        st.warning("Custom CSS file not found.")
 
-# ✅ Import from utils (ensure utils.py is in root folder)
-from utils import local_css
 local_css("assets/style.css")
 
-# ✅ Import your model function (AFTER fixing path)
-from backend.model.audio_model import predict_audio
+# Page content
+st.title("🎙️ Voice Emotion & Gender Detection")
+st.markdown("""
+Upload a `.wav` file to detect the speaker's gender and emotion using pre-trained Wav2Vec2 models from Hugging Face.
+""")
 
-# ✅ Streamlit UI code starts here
-st.set_page_config(page_title="🎙️ Voice Emotion & Gender Detection")
+# File uploader
+uploaded_file = st.file_uploader("Choose a .wav file", type=["wav"])
 
-st.title("🎤 Upload Voice and Detect Emotion & Gender")
-st.markdown("Upload a `.wav` audio file to detect the speaker's **gender** and **emotion** using machine learning.")
+if uploaded_file is not None:
+    audio_bytes = uploaded_file.read()
 
-uploaded_file = st.file_uploader("🎧 Upload your voice (.wav only)", type=["wav"])
+    # 🎧 Show audio player
+    st.markdown("#### 🔊 Uploaded Audio")
+    st.audio(audio_bytes, format="audio/wav")
 
-if uploaded_file:
-    with tempfile.NamedTemporaryFile(delete=False, suffix=".wav") as tmp_file:
-        tmp_file.write(uploaded_file.read())
-        tmp_path = tmp_file.name
+    # 🔘 Predict button
+    if st.button("🔍 Predict"):
+        try:
+            # Load audio data for model
+            audio_data, sample_rate = sf.read(BytesIO(audio_bytes))
 
-    st.audio(uploaded_file, format="audio/wav")
+            # Save to temp file
+            with tempfile.NamedTemporaryFile(delete=False, suffix=".wav") as temp_file:
+                sf.write(temp_file.name, audio_data, sample_rate)
+                temp_file_path = temp_file.name
 
-    with st.spinner("🧠 Analyzing voice..."):
-        gender, emotion = predict_audio(tmp_path)
+            # Run prediction
+            gender, emotion = predict_gender_emotion(temp_file_path)
 
-    if gender == "Error":
-        st.error(f"Prediction Failed: {emotion}")
-    else:
-        st.success(f"🧍‍♂️ **Gender**: `{gender}`")
-        st.success(f"🎭 **Emotion**: `{emotion}`")
+            # Clean up temp file
+            os.unlink(temp_file_path)
 
+            # Show results
+            st.success("Analysis complete!")
+            st.markdown("### Results", unsafe_allow_html=True)
+            with st.container():
+                st.markdown(
+                    f"""
+                    <div class="results-container">
+                        <div class="analysis-box">Gender : {gender}</div>
+                        <div class="analysis-box">Emotion : {emotion}</div>
+                    </div>
+                    """,
+                    unsafe_allow_html=True
+                )
+        except Exception as e:
+            st.error(f"Error processing file: {str(e)}")
+else:
+    st.info("Please upload a .wav file to begin analysis.")
